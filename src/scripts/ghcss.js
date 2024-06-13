@@ -50,12 +50,19 @@ async function fetchCssFile(url) {
     const parsedUrl = new URL(url);
     const username = parsedUrl.pathname.split("/").filter(segment => segment !== "")[0];
     const ghCssUrl = `https://raw.githubusercontent.com/${username}/${username}/main/gh.css`;
+    const overrideUrl = `https://raw.githubusercontent.com/gh-css/CustomOverride-TESTINGSHIT/main/${chrome.storage.local.get("overrideName")}.css?token=GHSAT0AAAAAACTTAU4UUWK5AR5ZL5L2F6IWZTLD4VA`
 
     try {
+        if(chrome.storage.local.get("customOverride") == false) {
         const response = await fetch(ghCssUrl);
         if (!response.ok) return null;
-
         return minifyCss(await response.text());
+    }
+    else {
+        const response = await fetch(overrideUrl);
+        if (!response.ok) return null;
+        return minifyCss(await response.text());
+    }
     } catch (error) {
         console.error("Error fetching CSS file:", error.message);
         return null;
