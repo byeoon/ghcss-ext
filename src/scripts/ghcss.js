@@ -45,7 +45,7 @@ function minifyCss(css){
     return css.trim();
 }
 
-// Fetch the CSS file from the GitHub repository
+// Fetch the CSS file from the GitHub repository or from Custom Override URL.
 async function fetchCssFile(url) {
     const parsedUrl = new URL(url);
     const username = parsedUrl.pathname.split("/").filter(segment => segment !== "")[0];
@@ -53,7 +53,7 @@ async function fetchCssFile(url) {
     const overrideUrl = `https://raw.githubusercontent.com/gh-css/CustomOverride-TESTINGSHIT/main/${chrome.storage.local.get("overrideName")}.css?token=GHSAT0AAAAAACTTAU4UUWK5AR5ZL5L2F6IWZTLD4VA`
 
     try {
-        if(chrome.storage.local.get("customOverride") == false) {
+        if (chrome.storage.local.get("customOverride") == false) {
         const response = await fetch(ghCssUrl);
         if (!response.ok) return null;
         return minifyCss(await response.text());
